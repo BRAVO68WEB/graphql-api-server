@@ -3,6 +3,7 @@ import startup from "./lib/startup";
 import api from "./api/index";
 import middleware from "./middleware/index";
 import logger from "./lib/logger";
+import cors from "cors";
 
 startup()
   .then(() => {
@@ -11,6 +12,7 @@ startup()
 
     middleware(app);
     api(app);
+    app.use(cors());
 
     app.listen(port, () => {
       if (process.send) {

@@ -1,4 +1,4 @@
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, gql } from "apollo-server-express";
 import schema from "./schema";
 import { isDevelopment } from "../../.app/environment";
 import loginWithToken from "../users/token";
@@ -6,25 +6,37 @@ import { configuration as corsConfiguration } from "../../middleware/cors";
 
 export default async (app) => {
   const server = new ApolloServer({
-    schema,
-    introspection: isDevelopment,
-    playground: isDevelopment,
-    context: async ({ req, res }) => {
-      const token = req?.cookies["app_login_token"];
-
-      const context = {
-        req,
-        res,
-        user: {},
-      };
-
-      const user = token ? await loginWithToken({ token }) : null;
-
-      if (!user?.error) {
-        context.user = user;
+    playground: true,
+    typeDefs: gql`
+      type Example {
+        message: String
       }
-
-      return context;
+  
+      type Query {
+        queryExample: Example
+      }
+  
+      type Mutation {
+        mutationExample: Example
+      }
+    `,
+    resolvers: {
+      Query: {
+        queryExample: (parent, args, context) => {
+          return {
+            message: "This is the message from the query resolver.",
+          };
+        },
+      },
+      Mutation: {
+        mutationExample: (parent, args, context) => {
+          console.log("Perform mutation here before responding.");
+  
+          return {
+            message: "This is the message from the mutation resolver.",
+          };
+        },
+      },
     },
   });
 
