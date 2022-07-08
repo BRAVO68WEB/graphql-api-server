@@ -4,7 +4,7 @@
   },
   "databases": {
     "mongodb": {
-      "uri": "mongodb://root:3YmgsZb73Ccj6QAhkq@144.24.143.121:7017/gql-app?authSource=admin&readPreference=primary&directConnection=true&ssl=false"
+      "uri": ""
     }
   },
   "smtp": {
